@@ -25,6 +25,9 @@ xargs rm < install_manifest.txt
 Warning! Directories created by the installation are not removed, but only all files created.
 
 ## Compiling for Windows x32 with MXE (Crossdev)
+### Wichtig für MXE es muss der Pfad gesetzt sein:
+```bash export PATH=~/mxe/usr/bin:$PATH ```
+
 ```bash
 cd ~
 git clone https://github.com/ThKattanek/opengl_demo.git
