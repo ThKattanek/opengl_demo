@@ -5,14 +5,20 @@
 
 using namespace std;
 
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+bool exit_main_loop = false;
+
 int main()
 {			
+	// GLFW Init
 	if(!glfwInit())
 	{
 		cout << "GLFW cannot initialize." << endl;
 		return -1;
 	}
 
+	// Create a window
 	GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL", NULL, NULL);
 	if(!window)
 	{
@@ -21,8 +27,10 @@ int main()
 		return -1;
 	}
 
+	// Set Context for gl
 	glfwMakeContextCurrent(window);
 
+	// Init GLEW
 	if(glewInit() != GLEW_OK)
 	{
 		cout << "GLEW cannot initialize." << endl;
@@ -30,9 +38,13 @@ int main()
 		return -1;
 	}
 
+	// Output gl version number
 	int major, minor, rev;
 	glfwGetVersion(&major, &minor, &rev);
 	cout << "OpenGL Version: " << major << "." << minor << "." << rev << endl;
+
+	glfwSetKeyCallback(window, key_callback);
+
 
 	const GLfloat vertices[] = {
 		0.0f,  0.5f,
@@ -95,7 +107,7 @@ int main()
 	glVertexAttribPointer(positionAttribute, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(window) && !exit_main_loop)
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
@@ -115,4 +127,10 @@ int main()
 	glfwTerminate();
 
 	return 0;
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	   exit_main_loop = true;
 }
