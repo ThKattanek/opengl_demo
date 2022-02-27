@@ -16,7 +16,7 @@ cmake .. -DCMAKE_BUILD_TYPE=Release
 make
 
 ```
-Optional kann noch -DCMAKE_INSTALL_PREFIX=[InstallPfad] verwendet werden.
+Optional can use -DCMAKE_INSTALL_PREFIX=[InstallPfad]
 
 ## Uninstall
 ```bash
@@ -25,8 +25,12 @@ xargs rm < install_manifest.txt
 Warning! Directories created by the installation are not removed, but only all files created.
 
 ## Compiling for Windows x32 with MXE (Crossdev)
-### Wichtig für MXE es muss der Pfad gesetzt sein:
-```bash export PATH=~/mxe/usr/bin:$PATH ```
+
+
+### Set Envoriment Varibale Path to MXE
+```bash
+#### export PATH=~/mxe/usr/bin:$PATH
+```
 
 ```bash
 cd ~
