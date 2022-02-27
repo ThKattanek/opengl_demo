@@ -3,17 +3,13 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "./vertex_buffer.h"
+
 using namespace std;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 bool exit_main_loop = false;
-
-struct Vertex {
-	float x;
-	float y;
-	float z;
-};
 
 int main()
 {			
@@ -66,20 +62,16 @@ int main()
 	};
 	uint32_t numVertices = 3;
 
-	GLuint vertexBuffer;
-	glGenBuffers(1, &vertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, numVertices * sizeof (Vertex), vertices, GL_STATIC_DRAW);
-
-	glVertexAttribIPointer(0, 3, GL_FLOAT, sizeof (Vertex), (void*) offsetof(struct Vertex,x));
-	glEnableVertexAttribArray(0);
+	VertexBuffer vertexBuffer(vertices, numVertices);
 
 	while (!glfwWindowShouldClose(window) && !exit_main_loop)
 	{
-		glColor3f(0.0f, 0.0f, 0.0f);
+		glColor4f(1.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		vertexBuffer.Bind();
 		glDrawArrays(GL_TRIANGLES, 0, numVertices);
+		vertexBuffer.UnBind();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
