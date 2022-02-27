@@ -5,7 +5,16 @@ project(opengl_demo LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(opengl_demo main.cpp)
+set(headers
+    vertex_buffer.h
+)
+
+set(sources
+    main.cpp
+    vertex_buffer.cpp
+)
+
+add_executable(opengl_demo ${sources})
 
 if(UNIX)
     target_link_libraries(opengl_demo glfw GLEW GL)
