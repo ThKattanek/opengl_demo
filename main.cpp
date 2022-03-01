@@ -63,17 +63,18 @@ int main()
 	};
 	uint32_t num_vertices = 3;
 
-	Shader shader("./shader/basic.vs", "./shader/basic.fs");
 	VertexBuffer vertexBuffer(vertices, num_vertices);
+	vertexBuffer.Bind();
+
+	Shader shader("./shader/basic.vs", "./shader/basic.fs");
+	shader.Bind();
 
 	while (!glfwWindowShouldClose(window) && !exit_main_loop)
 	{
-		glColor4f(1.0f, 0.0f, 0.0f, 0.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		vertexBuffer.Bind();
 		glDrawArrays(GL_TRIANGLES, 0, num_vertices);
-		vertexBuffer.UnBind();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

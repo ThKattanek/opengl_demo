@@ -41,6 +41,7 @@ GLuint Shader::Compile(string shader_source, GLenum type)
 		delete [] message;
 		return 0;
 	}
+	return id;
 }
 
 string Shader::Parse(const char *filename)
@@ -78,11 +79,13 @@ GLuint Shader::CreateShader(const char *vertex_shader_filename, const char *frag
 	glAttachShader(program, fs);
 	glLinkProgram(program);
 
+	/*
 	glDetachShader(program, vs);
 	glDetachShader(program, fs);
 
 	glDeleteShader(vs);
 	glDeleteShader(fs);
+	*/
 
 	return program;
 }
