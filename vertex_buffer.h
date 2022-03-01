@@ -8,14 +8,14 @@
 class VertexBuffer
 {
 public:
-	VertexBuffer(void* data, uint32_t numVertices);
+	VertexBuffer(void* data, uint32_t num_vertices);
 	virtual ~VertexBuffer();
 
 	void Bind();
 	void UnBind();
 
 private:
-	GLuint bufferID;
+	GLuint buffer_id;
 	GLuint vao;
 };
 

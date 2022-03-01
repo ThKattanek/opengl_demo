@@ -8,11 +8,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(headers
     defines.h
     vertex_buffer.h
+    shader.h
 )
 
 set(sources
     main.cpp
     vertex_buffer.cpp
+    shader.cpp
 )
 
 add_executable(opengl_demo ${sources})

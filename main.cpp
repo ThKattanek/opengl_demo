@@ -4,10 +4,11 @@
 #include <GLFW/glfw3.h>
 
 #include "./vertex_buffer.h"
+#include "./shader.h"
 
 using namespace std;
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 bool exit_main_loop = false;
 
@@ -50,7 +51,7 @@ int main()
 	// Output gl version
 	cout << "GL Version: " << glGetString(GL_VERSION) << endl;
 
-	glfwSetKeyCallback(window, key_callback);
+	glfwSetKeyCallback(window, KeyCallback);
 
 	/////////////////////// Create a triangle ///////////////////////
 
@@ -60,9 +61,10 @@ int main()
 		Vertex{0.5f, -0.5f, 0.0f},
 		Vertex{-0.5, -0.5f, 0.0f}
 	};
-	uint32_t numVertices = 3;
+	uint32_t num_vertices = 3;
 
-	VertexBuffer vertexBuffer(vertices, numVertices);
+	Shader shader("./shader/basic.vs", "./shader/basic.fs");
+	VertexBuffer vertexBuffer(vertices, num_vertices);
 
 	while (!glfwWindowShouldClose(window) && !exit_main_loop)
 	{
@@ -70,7 +72,7 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		vertexBuffer.Bind();
-		glDrawArrays(GL_TRIANGLES, 0, numVertices);
+		glDrawArrays(GL_TRIANGLES, 0, num_vertices);
 		vertexBuffer.UnBind();
 
 		glfwSwapBuffers(window);
@@ -82,7 +84,7 @@ int main()
 	return 0;
 }
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	   exit_main_loop = true;
