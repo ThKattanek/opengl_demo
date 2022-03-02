@@ -57,9 +57,9 @@ int main()
 
 	// Create a buffer with vertex coordinates
 	Vertex vertices[] = {
-		Vertex{0.0f,  0.5f, 0.0f},
+		Vertex{-0.5f,  -0.5f, 0.0f},
 		Vertex{0.5f, -0.5f, 0.0f},
-		Vertex{-0.5, -0.5f, 0.0f}
+		Vertex{0.0, 0.5f, 0.0f}
 	};
 	uint32_t num_vertices = 3;
 
