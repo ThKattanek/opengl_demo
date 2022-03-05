@@ -9,7 +9,7 @@ VertexBuffer::VertexBuffer(void *data, uint32_t num_vertices)
 	glBindBuffer(GL_ARRAY_BUFFER, buffer_id);
 	glBufferData(GL_ARRAY_BUFFER, num_vertices * sizeof (Vertex), data, GL_STATIC_DRAW);
 
-	glVertexAttribIPointer(0, 3, GL_FLOAT, sizeof (Vertex), (void*) offsetof(struct Vertex,x));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof (Vertex), (void*) offsetof(struct Vertex,x));
 	glEnableVertexAttribArray(0);
 
 	glBindVertexArray(0);
