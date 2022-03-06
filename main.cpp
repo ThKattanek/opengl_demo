@@ -12,6 +12,7 @@ void WindowSizeCallback(GLFWwindow* window, int width, int height);
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 bool exit_main_loop = false;
+bool wire_frame_mode = false;
 
 int main()
 {			
@@ -69,6 +70,16 @@ int main()
 
 	glfwSetKeyCallback(window, KeyCallback);
 
+	GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode *mode = glfwGetVideoMode(monitor);
+
+
+	// Fullscreen
+	//glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+
+	// Window
+	//glfwSetWindowMonitor(window, nullptr, 0, 0, 800, 600, 0);
+
 	/////////////////////// Create a triangle ///////////////////////
 
 	// Create a buffer with vertex coordinates
@@ -90,10 +101,23 @@ int main()
 
 	glfwSwapInterval(1);
 
+	double current_frame, last_frame, delta_time;
+
 	while (!glfwWindowShouldClose(window) && !exit_main_loop)
 	{
+		current_frame = glfwGetTime();
+		delta_time = current_frame - last_frame;
+		last_frame = current_frame;
+
+		cout << "Frames Per Second: "  << 1.0f / delta_time << endl;
+
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		if(wire_frame_mode)
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		else
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -110,6 +134,12 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	   exit_main_loop = true;
+
+	if (key == GLFW_KEY_W && action == GLFW_PRESS)
+		wire_frame_mode = true;
+
+	if (key == GLFW_KEY_W && action == GLFW_RELEASE)
+		wire_frame_mode = false;
 }
 
 void WindowSizeCallback(GLFWwindow* window, int width, int height)
