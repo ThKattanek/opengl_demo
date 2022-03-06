@@ -15,8 +15,9 @@ bool exit_main_loop = false;
 
 int main()
 {			
-	/////////////////////// Initialize OpenGL and GLFW ///////////////////////
+	cout << "Data Path: " << DATA_PATH << endl;
 
+	/////////////////////// Initialize OpenGL and GLFW ///////////////////////
 	// GLFW Init
 	if(!glfwInit())
 	{
@@ -30,7 +31,12 @@ int main()
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	// Create a window
-	GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL", NULL, NULL);
+
+	char window_title[100];
+
+	sprintf(window_title, "OpenGL Demo -- Version: %s (%s)", VERSION_STRING, ARCHITECTURE_STRING);
+
+	GLFWwindow* window = glfwCreateWindow(800, 600, window_title, NULL, NULL);
 	if(!window)
 	{
 		cout << "GLFW Window cannot create.";
@@ -79,7 +85,7 @@ int main()
 	VertexBuffer vertexBuffer(vertices, num_vertices);
 	vertexBuffer.Bind();
 
-	Shader shader("./shader/basic.vs", "./shader/basic.fs");
+	Shader shader(DATA_PATH"shaders/basic.vs", DATA_PATH"shaders/basic.fs");
 	shader.Bind();
 
 	glfwSwapInterval(1);
