@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include "./vertex_buffer.h"
+#include "./index_buffer.h"
 #include "./shader.h"
 
 using namespace std;
@@ -88,13 +89,23 @@ int main()
 		1.0f, 0.0f, 0.0f, 1.0f},
 		Vertex{0.5f, -0.5f, 0.0f,
 		0.0f, 1.0f, 0.0f, 1.0f},
-		Vertex{0.0, 0.5f, 0.0f,
-		0.0f, 0.0f, 1.0f, 1.0f}
+		Vertex{-0.5, 0.5f, 0.0f,
+		0.0f, 0.0f, 1.0f, 1.0f},
+		Vertex{0.5f,  0.5f, 0.0f,
+		1.0f, 0.0f, 0.0f, 1.0f},
 	};
-	uint32_t num_vertices = 3;
+	uint32_t num_vertices = 4;
 
 	VertexBuffer vertexBuffer(vertices, num_vertices);
 	vertexBuffer.Bind();
+
+	uint32_t indices[] = {
+		0,1,2,
+		3,1,2
+	};
+	uint32_t num_indices = 6;
+
+	IndexBuffer indexBuffer(indices, num_indices, sizeof (uint32_t));
 
 	Shader shader(DATA_PATH"shaders/basic.vs", DATA_PATH"shaders/basic.fs");
 	shader.Bind();
@@ -119,7 +130,12 @@ int main()
 		else
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		vertexBuffer.Bind();
+		indexBuffer.Bind();
+		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, 0);
+		indexBuffer.UnBind();
+		vertexBuffer.UnBind();
+
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

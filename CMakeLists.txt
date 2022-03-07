@@ -97,12 +97,14 @@ message(STATUS "Architektur: ${ARCHITECTURE}")
 set(HEADERS
     defines.h
     vertex_buffer.h
+    index_buffer.h
     shader.h
 )
 
 set(SOURCES
     main.cpp
     vertex_buffer.cpp
+    index_buffer.cpp
     shader.cpp
 )
 
