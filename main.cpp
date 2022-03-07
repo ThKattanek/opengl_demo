@@ -119,12 +119,16 @@ int main()
 	// Create a buffer with vertex coordinates
 	Vertex vertices[] = {
 		Vertex{-0.5f,  -0.5f, 0.0f,
+		0.0f, 0.0f,
 		1.0f, 0.0f, 0.0f, 1.0f},
 		Vertex{0.5f, -0.5f, 0.0f,
+		1.0f, 0.0f,
 		0.0f, 1.0f, 0.0f, 1.0f},
 		Vertex{-0.5, 0.5f, 0.0f,
+		0.0f, 1.0f,
 		0.0f, 0.0f, 1.0f, 1.0f},
 		Vertex{0.5f,  0.5f, 0.0f,
+		1.0f, 1.0f,
 		1.0f, 0.0f, 0.0f, 1.0f},
 	};
 	uint32_t num_vertices = 4;
@@ -142,6 +146,13 @@ int main()
 
 	Shader shader(DATA_PATH"shaders/basic.vs", DATA_PATH"shaders/basic.fs");
 	shader.Bind();
+
+	int texture_uniform_location = glGetUniformLocation(shader.GetId(), "u_texture");
+	if(texture_uniform_location != -1)
+	{
+		glUniform1i(texture_uniform_location, 0);
+	}
+
 
 	glfwSwapInterval(1);
 
@@ -165,6 +176,10 @@ int main()
 
 		vertexBuffer.Bind();
 		indexBuffer.Bind();
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture_id);
+
 		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, 0);
 		indexBuffer.UnBind();
 		vertexBuffer.UnBind();

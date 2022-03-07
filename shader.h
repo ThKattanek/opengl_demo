@@ -13,6 +13,8 @@ public:
 	Shader(const char* vertex_shader_filename, const char* fragment_shader_filename);
 	virtual ~Shader();
 
+	GLuint GetId();
+
 	void Bind();
 	void Unbind();
 

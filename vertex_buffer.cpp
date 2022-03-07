@@ -13,9 +13,13 @@ VertexBuffer::VertexBuffer(void *data, uint32_t num_vertices)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof (Vertex), (void*) offsetof(struct Vertex,x));
 	glEnableVertexAttribArray(0);
 
-	// Color
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof (Vertex), (void*) offsetof(struct Vertex,r));
+	// UV
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof (Vertex), (void*) offsetof(struct Vertex,u));
 	glEnableVertexAttribArray(1);
+
+	// Color
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof (Vertex), (void*) offsetof(struct Vertex,r));
+	glEnableVertexAttribArray(2);
 
 	glBindVertexArray(0);
 }
