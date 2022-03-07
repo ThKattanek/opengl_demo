@@ -192,6 +192,7 @@ if(WIN32)
 
     # Install all Datas
     install(DIRECTORY "data/shaders" DESTINATION ./data)
+    install(DIRECTORY "data/graphics" DESTINATION ./data)
 
     # Sonstiges
     install(FILES "LICENSE" DESTINATION ./)
@@ -204,6 +205,7 @@ else()
 
     # Install all Datas
     install(DIRECTORY "data/shaders" DESTINATION share/${PROJECT_NAME}/data)
+    install(DIRECTORY "data/graphics" DESTINATION share/${PROJECT_NAME}/data)
 
     # Install Startmenü Eintrag
     # install(FILES "src/${PROJECT_NAME}.desktop" DESTINATION share/applications)

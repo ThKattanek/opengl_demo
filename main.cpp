@@ -3,6 +3,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "./libs/stb_image.h"
+
 #include "./vertex_buffer.h"
 #include "./index_buffer.h"
 #include "./shader.h"
@@ -32,7 +35,6 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	// Create a window
 	char window_title[100];
@@ -58,6 +60,7 @@ int main()
 		return -1;
 	}
 
+	// Set OpenGL Debug Callback
 	glEnable(GL_DEBUG_OUTPUT);
 	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 	glDebugMessageCallback(OpenGLDebugCallback, 0);
@@ -79,14 +82,39 @@ int main()
 	GLFWmonitor *monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode *mode = glfwGetVideoMode(monitor);
 
-
 	// Fullscreen
 	//glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
 
 	// Window
 	//glfwSetWindowMonitor(window, nullptr, 0, 0, 800, 600, 0);
 
-	/////////////////////// Create a triangle ///////////////////////
+	/////////////////////// Create a rectangle ///////////////////////
+
+	// Load texture with stb_image
+	int texture_width = 0;
+	int texture_height = 0;
+	int texture_bitsperpixel = 0;
+
+	stbi_set_flip_vertically_on_load(true);
+	auto texture_buffer = stbi_load(DATA_PATH"graphics/logo.png", &texture_width, &texture_height, &texture_bitsperpixel, 4);
+
+	GLuint texture_id;
+	glGenTextures(1, &texture_id);
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, texture_width, texture_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_buffer);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	if(texture_buffer)
+	{
+		stbi_image_free(texture_buffer);
+	}
 
 	// Create a buffer with vertex coordinates
 	Vertex vertices[] = {
