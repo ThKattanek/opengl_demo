@@ -5,6 +5,8 @@ A demonstration of opengl
 * OpenGL
 * GLFW
 * GLEW
+* STB_IMAGE (as only headerfile "libs/stb_image.h" into in this project) - http://nothings.org/stb
+
 
 ## Build
 ```bash
