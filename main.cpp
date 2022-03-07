@@ -12,6 +12,8 @@ using namespace std;
 void WindowSizeCallback(GLFWwindow* window, int width, int height);
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
+void OpenGLDebugCallback(GLenum source, GLenum type, GLuint id, GLenum serverity, GLsizei length, const GLchar* message, const void* userParam);
+
 bool exit_main_loop = false;
 bool wire_frame_mode = false;
 
@@ -33,7 +35,6 @@ int main()
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	// Create a window
-
 	char window_title[100];
 
 	sprintf(window_title, "OpenGL Demo -- Version: %s (%s)", VERSION_STRING, ARCHITECTURE_STRING);
@@ -56,6 +57,10 @@ int main()
 		glfwTerminate();
 		return -1;
 	}
+
+	glEnable(GL_DEBUG_OUTPUT);
+	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+	glDebugMessageCallback(OpenGLDebugCallback, 0);
 
 	// Set Vieport and set frambuffer size callback
 	glViewport(0,0,800,600);
@@ -120,7 +125,7 @@ int main()
 		delta_time = current_frame - last_frame;
 		last_frame = current_frame;
 
-		cout << "Frames Per Second: "  << 1.0f / delta_time << endl;
+		// cout << "Frames Per Second: "  << 1.0f / delta_time << endl;
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -136,7 +141,6 @@ int main()
 		indexBuffer.UnBind();
 		vertexBuffer.UnBind();
 
-
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
@@ -144,6 +148,11 @@ int main()
 	glfwTerminate();
 
 	return 0;
+}
+
+void OpenGLDebugCallback(GLenum source, GLenum type, GLuint id, GLenum serverity, GLsizei length, const GLchar* message, const void *userParam)
+{
+	cout << "[OpenGL Debug:] " << message << endl;
 }
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
