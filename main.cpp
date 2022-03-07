@@ -12,7 +12,7 @@ using namespace std;
 void WindowSizeCallback(GLFWwindow* window, int width, int height);
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
-void OpenGLDebugCallback(GLenum source, GLenum type, GLuint id, GLenum serverity, GLsizei length, const GLchar* message, const void* userParam);
+void APIENTRY OpenGLDebugCallback(GLenum source, GLenum type, GLuint id, GLenum serverity, GLsizei length, const GLchar* message, const void* userParam);
 
 bool exit_main_loop = false;
 bool wire_frame_mode = false;
