@@ -99,6 +99,7 @@ set(HEADERS
     vertex_buffer.h
     index_buffer.h
     shader.h
+    libs/stb_image.h
 )
 
 set(SOURCES
