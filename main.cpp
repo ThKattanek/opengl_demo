@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <glm/ext/matrix_transform.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "./libs/stb_image.h"
@@ -149,11 +150,14 @@ int main()
 	shader.Bind();
 
 	int texture_uniform_location = glGetUniformLocation(shader.GetId(), "u_texture");
-	if(texture_uniform_location != -1)
-	{
-		glUniform1i(texture_uniform_location, 0);
-	}
+	glUniform1i(texture_uniform_location, 0);
 
+
+	glm::mat4 model_matrix = glm::mat4(1.0f);
+	int model_matrix_uniform_location = glGetUniformLocation(shader.GetId(), "u_model_matrix");
+
+	// Scale
+	model_matrix = glm::scale(model_matrix, glm::vec3(1.2f,1.5f,1.5f));
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -183,6 +187,11 @@ int main()
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture_id);
+
+		// Rotate
+		model_matrix = glm::rotate(model_matrix, float(5.0f * delta_time), glm::vec3(0,0,1));
+
+		glUniformMatrix4fv(model_matrix_uniform_location, 1, GL_FALSE, &model_matrix[0][0]);
 
 		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, 0);
 		indexBuffer.UnBind();
