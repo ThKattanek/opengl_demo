@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "./libs/stb_image.h"
@@ -83,10 +84,10 @@ int main()
 	const GLFWvidmode *mode = glfwGetVideoMode(monitor);
 
 	// Fullscreen
-	//glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+	// glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
 
 	// Window
-	//glfwSetWindowMonitor(window, nullptr, 0, 0, 800, 600, 0);
+	// glfwSetWindowMonitor(window, nullptr, 0, 0, 800, 600, 0);
 
 	/////////////////////// Create a rectangle ///////////////////////
 
@@ -118,16 +119,16 @@ int main()
 
 	// Create a buffer with vertex coordinates
 	Vertex vertices[] = {
-		Vertex{-0.5f,  -0.5f, 0.0f,
+		Vertex{-1.0f,  -1.0f, 0.0f,
 		0.0f, 0.0f,
 		1.0f, 0.0f, 0.0f, 1.0f},
-		Vertex{0.5f, -0.5f, 0.0f,
+		Vertex{1.0f, -1.0f, 0.0f,
 		1.0f, 0.0f,
 		0.0f, 1.0f, 0.0f, 1.0f},
-		Vertex{-0.5, 0.5f, 0.0f,
+		Vertex{-1.0, 1.0f, 0.0f,
 		0.0f, 1.0f,
 		0.0f, 0.0f, 1.0f, 1.0f},
-		Vertex{0.5f,  0.5f, 0.0f,
+		Vertex{1.0f,  1.0f, 0.0f,
 		1.0f, 1.0f,
 		1.0f, 0.0f, 0.0f, 1.0f},
 	};
@@ -166,7 +167,7 @@ int main()
 
 		// cout << "Frames Per Second: "  << 1.0f / delta_time << endl;
 
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		if(wire_frame_mode)

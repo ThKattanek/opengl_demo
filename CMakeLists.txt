@@ -157,6 +157,15 @@ else()
     message(FATAL_ERROR "GLFW not found!")
 endif()
 
+# GLM
+pkg_check_modules(GLM REQUIRED glm)
+if(GLM_FOUND)
+    include_directories(${GLM_INCLUDE_DIR})
+    message(STATUS "GLM found!")
+else()
+    message(FATAL_ERROR "GLM not found!")
+endif()
+
 
 ################### EXECUTABLE ####################
 
