@@ -119,16 +119,16 @@ int main()
 
 	// Create a buffer with vertex coordinates
 	Vertex vertices[] = {
-		Vertex{-1.0f,  -1.0f, 0.0f,
+		Vertex{-0.5f,  -0.5f, 0.0f,
 		0.0f, 0.0f,
 		1.0f, 0.0f, 0.0f, 1.0f},
-		Vertex{1.0f, -1.0f, 0.0f,
+		Vertex{0.5f, -0.5f, 0.0f,
 		1.0f, 0.0f,
 		0.0f, 1.0f, 0.0f, 1.0f},
-		Vertex{-1.0, 1.0f, 0.0f,
+		Vertex{-0.5, 0.5f, 0.0f,
 		0.0f, 1.0f,
 		0.0f, 0.0f, 1.0f, 1.0f},
-		Vertex{1.0f,  1.0f, 0.0f,
+		Vertex{0.5f, 0.5f, 0.0f,
 		1.0f, 1.0f,
 		1.0f, 0.0f, 0.0f, 1.0f},
 	};
@@ -155,6 +155,9 @@ int main()
 	}
 
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glfwSwapInterval(1);
 
 	double current_frame, last_frame, delta_time;
@@ -167,7 +170,7 @@ int main()
 
 		// cout << "Frames Per Second: "  << 1.0f / delta_time << endl;
 
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		if(wire_frame_mode)
