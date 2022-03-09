@@ -82,11 +82,12 @@ int main()
 	glfwSetKeyCallback(window, KeyCallback);
 
 
-	//GLFWmonitor *monitor = glfwGetPrimaryMonitor();
-	//const GLFWvidmode *mode = glfwGetVideoMode(monitor);
+	GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode *mode = glfwGetVideoMode(monitor);
 
 	// Fullscreen
-	// glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+	//glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 	// Window
 	// glfwSetWindowMonitor(window, nullptr, 0, 0, 800, 600, 0);
