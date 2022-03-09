@@ -5,12 +5,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "./libs/stb_image.h"
-
 #include "./vertex_buffer.h"
 #include "./index_buffer.h"
 #include "./shader.h"
+#include "./texture.h"
 
 using namespace std;
 using namespace glm;
@@ -80,10 +78,12 @@ int main()
 	// Output gl version
 	cout << "GL Version: " << glGetString(GL_VERSION) << endl;
 
+	// Set Key Callback
 	glfwSetKeyCallback(window, KeyCallback);
 
-	GLFWmonitor *monitor = glfwGetPrimaryMonitor();
-	const GLFWvidmode *mode = glfwGetVideoMode(monitor);
+
+	//GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+	//const GLFWvidmode *mode = glfwGetVideoMode(monitor);
 
 	// Fullscreen
 	// glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
@@ -93,33 +93,7 @@ int main()
 
 	/////////////////////// Create a rectangle ///////////////////////
 
-	// Load texture with stb_image
-	int texture_width = 0;
-	int texture_height = 0;
-	int texture_bitsperpixel = 0;
-
-	stbi_set_flip_vertically_on_load(true);
-	auto texture_buffer = stbi_load(DATA_PATH"graphics/logo.png", &texture_width, &texture_height, &texture_bitsperpixel, 4);
-
-	GLuint texture_id;
-	glGenTextures(1, &texture_id);
-	glBindTexture(GL_TEXTURE_2D, texture_id);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, texture_width, texture_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_buffer);
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	if(texture_buffer)
-	{
-		stbi_image_free(texture_buffer);
-	}
-
-	// Create a buffer with vertex coordinates
+	// Vertex data
 	Vertex vertices[] = {
 		Vertex{-0.5f,  -0.5f, 0.0f,
 		0.0f, 0.0f,
@@ -136,45 +110,48 @@ int main()
 	};
 	uint32_t num_vertices = 4;
 
-	VertexBuffer vertexBuffer(vertices, num_vertices);
-	vertexBuffer.Bind();
-
+	// Indices
 	uint32_t indices[] = {
 		0,1,2,
 		3,1,2
 	};
 	uint32_t num_indices = 6;
 
+	VertexBuffer vertexBuffer(vertices, num_vertices);
 	IndexBuffer indexBuffer(indices, num_indices, sizeof (uint32_t));
-
 	Shader shader(DATA_PATH"shaders/basic.vs", DATA_PATH"shaders/basic.fs");
-	shader.Bind();
+	Texture texture(DATA_PATH"graphics/logo.png");
 
+	// Texture Uniform Location
 	int texture_uniform_location = glGetUniformLocation(shader.GetId(), "u_texture");
 	glUniform1i(texture_uniform_location, 0);
 
-
+	// Model Matrix Uniform Location
 	mat4 model_matrix = mat4(1.0f);
 	int model_matrix_uniform_location = glGetUniformLocation(shader.GetId(), "u_model_matrix");
 
 	// Scale
 	model_matrix = scale(model_matrix, vec3(1.2f,1.5f,1.5f));
 
+	// Alphablending Enable
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	// VSync Activate (1 = VSync / -1 = FreeSync)
 	glfwSwapInterval(1);
 
 	double current_frame, last_frame, delta_time;
 
 	while (!glfwWindowShouldClose(window) && !exit_main_loop)
 	{
+		// Calculate frametime
 		current_frame = glfwGetTime();
 		delta_time = current_frame - last_frame;
 		last_frame = current_frame;
 
-		// cout << "Frames Per Second: "  << 1.0f / delta_time << endl;
+		//cout << "Frames Per Second: "  << 1.0f / delta_time << endl;
 
+		// Clear background buffer
 		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
@@ -183,18 +160,18 @@ int main()
 		else
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+		shader.Bind();
 		vertexBuffer.Bind();
 		indexBuffer.Bind();
-
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture_id);
+		texture.Bind();
 
 		// Rotation
 		model_matrix = glm::rotate(model_matrix, float(5.0f * delta_time), glm::vec3(0,0,1));
-
 		glUniformMatrix4fv(model_matrix_uniform_location, 1, GL_FALSE, &model_matrix[0][0]);
-
 		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, 0);
+
+		shader.Unbind();
+		texture.Unbind();
 		indexBuffer.UnBind();
 		vertexBuffer.UnBind();
 

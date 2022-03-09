@@ -99,6 +99,7 @@ set(HEADERS
     vertex_buffer.h
     index_buffer.h
     shader.h
+    texture.h
     libs/stb_image.h
 )
 
@@ -107,6 +108,7 @@ set(SOURCES
     vertex_buffer.cpp
     index_buffer.cpp
     shader.cpp
+    texture.cpp
 )
 
 ################### RESOURCEN #####################
