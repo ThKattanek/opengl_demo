@@ -123,8 +123,11 @@ int main()
 	Texture texture(DATA_PATH"graphics/logo.png");
 
 	// Texture Uniform Location
+
+	shader.Bind();
 	int texture_uniform_location = glGetUniformLocation(shader.GetId(), "u_texture");
 	glUniform1i(texture_uniform_location, 0);
+	shader.Unbind();
 
 	// Model Matrix Uniform Location
 	mat4 model_matrix = mat4(1.0f);
