@@ -100,6 +100,7 @@ set(HEADERS
     index_buffer.h
     shader.h
     texture.h
+    camera.h
     libs/stb_image.h
 )
 
@@ -109,6 +110,7 @@ set(SOURCES
     index_buffer.cpp
     shader.cpp
     texture.cpp
+    camera.cpp
 )
 
 ################### RESOURCEN #####################

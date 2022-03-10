@@ -9,6 +9,7 @@
 #include "./index_buffer.h"
 #include "./shader.h"
 #include "./texture.h"
+#include "./camera.h"
 
 using namespace std;
 using namespace glm;
@@ -124,27 +125,21 @@ int main()
 	Texture texture(DATA_PATH"graphics/logo.png");
 
 	// Texture Uniform Location
-
 	shader.Bind();
 	int texture_uniform_location = glGetUniformLocation(shader.GetId(), "u_texture");
 	glUniform1i(texture_uniform_location, 0);
 	shader.Unbind();
 
-	// Projection
-	mat4 projection = ortho(-1.0f, 1.0f, -1.0f, 1.0f, -10.0f, 100.0f);
-	projection = perspective(radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-
 	// Model Matrix Uniform Location
 	int modelViewProj_uniform_location = glGetUniformLocation(shader.GetId(), "u_modelViewProj");
+	mat4 projection_matrix = mat4(1.0f);
 
-	mat4 model = mat4(1.0f);
+	// Camera
+	Camera camera(90.0f, 800.0f, 600.0f);
+	camera.Translate(vec3(0.0f, 0.0f, 1.0f));
+	camera.Update();
 
-	mat4 view = translate(mat4(1.0f), vec3(0.0f, 0.0f, -3.0f));
-
-	mat4 projection_matrix = projection * view * model; // Reihenfolge ist hier wichtig !!
-
-	// Scale
-	model = scale(model, vec3(1.2f,1.5f,1.5f));
+	mat4 model_matrix = mat4(1.0f);
 
 	// Alphablending Enable
 	glEnable(GL_BLEND);
@@ -154,6 +149,8 @@ int main()
 	glfwSwapInterval(1);
 
 	double current_frame, last_frame, delta_time;
+
+	float model_rotation = 0.0f;
 
 	while (!glfwWindowShouldClose(window) && !exit_main_loop)
 	{
@@ -178,9 +175,16 @@ int main()
 		indexBuffer.Bind();
 		texture.Bind();
 
+		// Model Matrix Reset
+		model_matrix = mat4(1.0f);
+
+		// Scale
+		model_matrix = scale(model_matrix, vec3(1.0f,1.0f,1.0f));
+
 		// Rotation
-		model = glm::rotate(model, float(2.0f * delta_time), glm::vec3(0,1,0));
-		projection_matrix = projection * view * model; // Reihenfolge ist hier wichtig !!
+		model_rotation += 1.1f * delta_time;
+		model_matrix = glm::rotate(model_matrix, float(model_rotation), glm::vec3(0,1,0));
+		projection_matrix = camera.GetViewProj() * model_matrix; // Reihenfolge ist hier wichtig !!
 
 		glUniformMatrix4fv(modelViewProj_uniform_location, 1, GL_FALSE, &projection_matrix[0][0]);
 		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, 0);
