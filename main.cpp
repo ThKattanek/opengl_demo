@@ -22,6 +22,8 @@ void APIENTRY OpenGLDebugCallback(GLenum source, GLenum type, GLuint id, GLenum 
 bool exit_main_loop = false;
 bool wire_frame_mode = false;
 
+Camera camera(90.0f, 800.0f, 600.0f);
+
 int main()
 {			
 	cout << "Data Path: " << DATA_PATH << endl;
@@ -135,7 +137,7 @@ int main()
 	mat4 projection_matrix = mat4(1.0f);
 
 	// Camera
-	Camera camera(90.0f, 800.0f, 600.0f);
+	camera = Camera(90.0f, 800.0f, 600.0f);
 	camera.Translate(vec3(0.0f, 0.0f, 1.0f));
 	camera.Update();
 
@@ -159,7 +161,7 @@ int main()
 		delta_time = current_frame - last_frame;
 		last_frame = current_frame;
 
-		//cout << "Frames Per Second: "  << 1.0f / delta_time << endl;
+		cout << "Frames Per Second: "  << 1.0f / delta_time << endl;
 
 		// Clear background buffer
 		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
@@ -174,6 +176,8 @@ int main()
 		vertexBuffer.Bind();
 		indexBuffer.Bind();
 		texture.Bind();
+
+		camera.Update();
 
 		// Model Matrix Reset
 		model_matrix = mat4(1.0f);
@@ -223,5 +227,6 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 void WindowSizeCallback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
+	camera.SetViewSize(width, height);
 	cout << "Resize: width=" << width << ", height=" << height << endl;
 }
