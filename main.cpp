@@ -130,12 +130,21 @@ int main()
 	glUniform1i(texture_uniform_location, 0);
 	shader.Unbind();
 
+	// Projection
+	mat4 projection = ortho(-1.0f, 1.0f, -1.0f, 1.0f, -10.0f, 100.0f);
+	projection = perspective(radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
 	// Model Matrix Uniform Location
-	mat4 model_matrix = mat4(1.0f);
-	int model_matrix_uniform_location = glGetUniformLocation(shader.GetId(), "u_model_matrix");
+	int modelViewProj_uniform_location = glGetUniformLocation(shader.GetId(), "u_modelViewProj");
+
+	mat4 model = mat4(1.0f);
+
+	mat4 view = translate(mat4(1.0f), vec3(0.0f, 0.0f, -3.0f));
+
+	mat4 projection_matrix = projection * view * model; // Reihenfolge ist hier wichtig !!
 
 	// Scale
-	model_matrix = scale(model_matrix, vec3(1.2f,1.5f,1.5f));
+	model = scale(model, vec3(1.2f,1.5f,1.5f));
 
 	// Alphablending Enable
 	glEnable(GL_BLEND);
@@ -170,8 +179,10 @@ int main()
 		texture.Bind();
 
 		// Rotation
-		model_matrix = glm::rotate(model_matrix, float(5.0f * delta_time), glm::vec3(0,0,1));
-		glUniformMatrix4fv(model_matrix_uniform_location, 1, GL_FALSE, &model_matrix[0][0]);
+		model = glm::rotate(model, float(2.0f * delta_time), glm::vec3(0,1,0));
+		projection_matrix = projection * view * model; // Reihenfolge ist hier wichtig !!
+
+		glUniformMatrix4fv(modelViewProj_uniform_location, 1, GL_FALSE, &projection_matrix[0][0]);
 		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, 0);
 
 		shader.Unbind();
