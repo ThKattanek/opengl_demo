@@ -4,6 +4,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <AL/al.h>
+#include <AL/alc.h>
 
 #include "./vertex_buffer.h"
 #include "./index_buffer.h"
@@ -27,6 +29,30 @@ Camera camera(90.0f, 800.0f, 600.0f);
 int main()
 {			
 	cout << "Data Path: " << DATA_PATH << endl;
+
+	///////////////// OpenAL ////////////////////
+
+	char* audio_device_list;
+
+	if( alcIsExtensionPresent( NULL,"ALC_ENUMERATION_EXT") == AL_TRUE )
+	{
+		audio_device_list = (char *)alcGetString( NULL, ALC_ALL_DEVICES_SPECIFIER);
+	}
+
+
+	cout << audio_device_list << endl;
+
+	ALCdevice* audio_device = alcOpenDevice(audio_device_list);
+
+	if (!audio_device)
+	{
+		cout << "OpenAL cannot open a audio device." << endl;
+		return -1;
+	}
+
+	ALCcontext* audio_context = alcCreateContext(audio_device, NULL);
+	alcMakeContextCurrent(audio_context);
+
 
 	/////////////////////// Initialize OpenGL and GLFW ///////////////////////
 	// GLFW Init
@@ -85,8 +111,8 @@ int main()
 	glfwSetKeyCallback(window, KeyCallback);
 
 
-	GLFWmonitor *monitor = glfwGetPrimaryMonitor();
-	const GLFWvidmode *mode = glfwGetVideoMode(monitor);
+	//GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+	//const GLFWvidmode *mode = glfwGetVideoMode(monitor);
 
 	// Fullscreen
 	//glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
@@ -150,7 +176,7 @@ int main()
 	// VSync Activate (1 = VSync / -1 = FreeSync)
 	glfwSwapInterval(1);
 
-	double current_frame, last_frame, delta_time;
+	double current_frame = 0.0f, last_frame = 0.0f, delta_time = 0.0f;
 
 	float model_rotation = 0.0f;
 
@@ -161,7 +187,7 @@ int main()
 		delta_time = current_frame - last_frame;
 		last_frame = current_frame;
 
-		cout << "Frames Per Second: "  << 1.0f / delta_time << endl;
+		// cout << "Frames Per Second: "  << 1.0f / delta_time << endl;
 
 		// Clear background buffer
 		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
@@ -203,6 +229,9 @@ int main()
 	}
 
 	glfwTerminate();
+
+	alcDestroyContext(audio_context);
+	alcCloseDevice(audio_device);
 
 	return 0;
 }

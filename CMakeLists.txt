@@ -170,6 +170,13 @@ else()
     message(FATAL_ERROR "GLM not found!")
 endif()
 
+# OpenAL
+find_package(OpenAL REQUIRED)
+if(OPENAL_FOUND)
+    message(STATUS "OpenAL found!")
+else()
+    message(FATAL_ERROR "OpenAL not found!")
+endif()
 
 ################### EXECUTABLE ####################
 
@@ -182,10 +189,12 @@ endif()
 ################## LINK LIBRARYS ##################
 
 if(WIN32)
-    add_definitions(-DGLEW_STATIC)
+    add_definitions(-DGLEW_STATIC)				# for GLEW static linking
+    add_definitions(-DAL_LIBTYPE_STATIC)			# for OpenAL static linking
+    target_link_libraries(opengl_demo ${OPENAL_LIBRARY}  winmm)	# winmm need openal32
 endif(WIN32)
 
-target_link_libraries(opengl_demo ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} ${GL_LIBRARIES})
+target_link_libraries(opengl_demo ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} ${GL_LIBRARIES} ${OPENAL_LIBRARY})
 
 ################### INSTALL #######################
 
