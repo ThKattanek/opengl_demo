@@ -101,6 +101,9 @@ set(HEADERS
     shader.h
     texture.h
     camera.h
+    sound_buffer.h
+    sound_device.h
+    sound_source.h
     libs/stb_image.h
 )
 
@@ -111,6 +114,9 @@ set(SOURCES
     shader.cpp
     texture.cpp
     camera.cpp
+    sound_buffer.cpp
+    sound_device.cpp
+    sound_source.cpp
 )
 
 ################### RESOURCEN #####################
@@ -223,6 +229,7 @@ if(WIN32)
     # Install all Datas
     install(DIRECTORY "data/shaders" DESTINATION ./data)
     install(DIRECTORY "data/graphics" DESTINATION ./data)
+    install(DIRECTORY "data/sounds" DESTINATION ./data)
 
     # Sonstiges
     install(FILES "LICENSE" DESTINATION ./)
@@ -236,6 +243,7 @@ else()
     # Install all Datas
     install(DIRECTORY "data/shaders" DESTINATION share/${PROJECT_NAME}/data)
     install(DIRECTORY "data/graphics" DESTINATION share/${PROJECT_NAME}/data)
+    install(DIRECTORY "data/sounds" DESTINATION share/${PROJECT_NAME}/data)
 
     # Install Startmenü Eintrag
     # install(FILES "src/${PROJECT_NAME}.desktop" DESTINATION share/applications)

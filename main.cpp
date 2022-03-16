@@ -4,14 +4,16 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <AL/al.h>
-#include <AL/alc.h>
 
 #include "./vertex_buffer.h"
 #include "./index_buffer.h"
 #include "./shader.h"
 #include "./texture.h"
 #include "./camera.h"
+
+#include "./sound_device.h"
+#include "./sound_buffer.h"
+#include "./sound_source.h"
 
 using namespace std;
 using namespace glm;
@@ -31,27 +33,16 @@ int main()
 	cout << "Data Path: " << DATA_PATH << endl;
 
 	///////////////// OpenAL ////////////////////
+	SoundDevice * mysounddevice = SoundDevice::get();
 
-	char* audio_device_list;
+	uint32_t /*ALuint*/ sound1 = SoundBuffer::get()->addSoundEffect(DATA_PATH"sounds/spell.ogg");
+	uint32_t /*ALuint*/ sound2 = SoundBuffer::get()->addSoundEffect(DATA_PATH"sounds/magicfail.ogg");
 
-	if( alcIsExtensionPresent( NULL,"ALC_ENUMERATION_EXT") == AL_TRUE )
-	{
-		audio_device_list = (char *)alcGetString( NULL, ALC_ALL_DEVICES_SPECIFIER);
-	}
+	SoundSource mySpeaker1;
 
 
-	cout << audio_device_list << endl;
+	mySpeaker1.Play(sound1);
 
-	ALCdevice* audio_device = alcOpenDevice(audio_device_list);
-
-	if (!audio_device)
-	{
-		cout << "OpenAL cannot open a audio device." << endl;
-		return -1;
-	}
-
-	ALCcontext* audio_context = alcCreateContext(audio_device, NULL);
-	alcMakeContextCurrent(audio_context);
 
 
 	/////////////////////// Initialize OpenGL and GLFW ///////////////////////
@@ -229,9 +220,6 @@ int main()
 	}
 
 	glfwTerminate();
-
-	alcDestroyContext(audio_context);
-	alcCloseDevice(audio_device);
 
 	return 0;
 }
