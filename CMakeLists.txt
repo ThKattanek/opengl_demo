@@ -94,19 +94,6 @@ message(STATUS "Architektur: ${ARCHITECTURE}")
 
 ##################### SOURCES #####################
 
-set(HEADERS
-    defines.h
-    vertex_buffer.h
-    index_buffer.h
-    shader.h
-    texture.h
-    camera.h
-    sound_buffer.h
-    sound_device.h
-    sound_source.h
-    libs/stb_image.h
-)
-
 set(SOURCES
     main.cpp
     vertex_buffer.cpp
@@ -117,6 +104,17 @@ set(SOURCES
     sound_buffer.cpp
     sound_device.cpp
     sound_source.cpp
+
+    defines.h
+    vertex_buffer.h
+    index_buffer.h
+    shader.h
+    texture.h
+    camera.h
+    sound_buffer.h
+    sound_device.h
+    sound_source.h
+    libs/stb_image.h
 )
 
 ################### RESOURCEN #####################
