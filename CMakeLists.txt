@@ -178,6 +178,14 @@ else()
     message(FATAL_ERROR "OpenAL not found!")
 endif()
 
+# LibSndFile
+find_package(LibSndFile REQUIRED)
+if(LIBSNDFILE_FOUND)
+    message(STATUS "LibSndFile found!")
+else()
+    message(FATAL_ERROR "LibSndFile not found!")
+endif()
+
 ################### EXECUTABLE ####################
 
 if(NOT WIN32)
@@ -194,7 +202,7 @@ if(WIN32)
     target_link_libraries(opengl_demo ${OPENAL_LIBRARY}  winmm)	# winmm need openal32
 endif(WIN32)
 
-target_link_libraries(opengl_demo ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} ${GL_LIBRARIES} ${OPENAL_LIBRARY})
+target_link_libraries(opengl_demo ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} ${GL_LIBRARIES} ${OPENAL_LIBRARY} ${LIBSNDFILE_LIBRARIES})
 
 ################### INSTALL #######################
 
