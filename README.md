@@ -8,6 +8,7 @@ A demonstration of opengl
 * STB_IMAGE (as only headerfile "libs/stb_image.h" into in this project) - http://nothings.org/stb
 * GLM
 * OpenAL
+* LibSndFile
 
 ## Build
 ```bash
